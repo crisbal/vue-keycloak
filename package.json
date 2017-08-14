@@ -1,6 +1,6 @@
 {
   "name": "vue-keycloak",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Use Keycloak Javascript Adapter in Vue.js",
   "author": "Cristian Baldi",
   "license": "MIT",
