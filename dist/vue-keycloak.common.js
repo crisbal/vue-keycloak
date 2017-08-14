@@ -1,5 +1,5 @@
 /**
-  * vue-keycloak v0.0.6
+  * vue-keycloak v0.0.7
   * (c) Cristian Baldi 2017
   */
 'use strict';
@@ -1337,6 +1337,6 @@ VueKeyCloak.install = function (Vue, options) {
   });
 };
 
-VueKeyCloak.version = '0.0.6';
+VueKeyCloak.version = '0.0.7';
 
 module.exports = VueKeyCloak;
