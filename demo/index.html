@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue-keycloak</title>
+  <script src="https://unpkg.com/vue"></script>
+  <script src="../dist/vue-keycloak.js"></script>
+</head>
+<body>
+  <div id="app">
+    <p>Ready: {{ $keycloak.ready }}</p>
+    <p>Auth: {{ $keycloak.authenticated }}</p>
+    <p>User: <code>{{ $keycloak.user }}</code></p>
+    <p>Token: <code>{{ $keycloak.token }}</code></p>
+    <p>ResourceAccess: <code>{{ $keycloak.resourceAccess }}</code></p>
+  </div>
+  <script>
+    Vue.use(VueKeycloak, {
+      keycloakOptions: {
+        "realm": "MyRealm",
+        "url": "http://localhost:5555/auth",
+        "ssl-required": "external",
+        "resource": "MyClient",
+        "public-client": true,
+        "clientId": "MyClient"
+      },
+      keycloakInitOptions: {
+        onLoad: 'check-sso'
+      }
+    })
+    var app = new Vue({
+      el: '#app',
+      mounted() {
+        console.log(this.$keycloak)
+      }
+    })
+  </script>
+</body>
+</html>
