@@ -47,6 +47,6 @@
     "vue": "^2.3.0"
   },
   "dependencies": {
-    "keycloak-js": "^3.2.1"
+    "keycloak-js": "^3.4.0"
   }
 }

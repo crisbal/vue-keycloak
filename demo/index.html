@@ -10,9 +10,17 @@
   <div id="app">
     <p>Ready: {{ $keycloak.ready }}</p>
     <p>Auth: {{ $keycloak.authenticated }}</p>
-    <p>User: <code>{{ $keycloak.user }}</code></p>
-    <p>Token: <code>{{ $keycloak.token }}</code></p>
-    <p>ResourceAccess: <code>{{ $keycloak.resourceAccess }}</code></p>
+    <template v-if="$keycloak.authenticated">
+      <h1>You are logged in</h1>
+      <p>User: <code>{{ $keycloak.user }}</code></p>
+      <p>Token: <code>{{ $keycloak.token }}</code></p>
+      <p>ResourceAccess: <code>{{ $keycloak.resourceAccess }}</code></p>
+      <button @click="$keycloak.logout()">Logout</button>
+    </template>
+    <template v-else>
+      <h1>You are not logged in</h1>
+      <button @click="$keycloak.login()">Login</button>
+    </template>
   </div>
   <script>
     Vue.use(VueKeycloak, {
