@@ -4,6 +4,9 @@
   "description": "Use Keycloak Javascript Adapter in Vue.js",
   "author": "Cristian Baldi",
   "license": "MIT",
+  "main": "dist/vue-keycloak.common.js",
+  "module": "dist/vue-keycloak.esm.js",
+  "unpkg": "dist/vue-keycloak.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/crisbal/vue-keycloak.git"
