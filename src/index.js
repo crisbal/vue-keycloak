@@ -1,5 +1,5 @@
 /* @flow */
-import Keycloak from './vendor/keycloak.js'
+import Keycloak from 'keycloak-js'
 
 let installed: Boolean = false
 
