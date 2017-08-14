@@ -19,7 +19,8 @@
   "scripts": {
     "watch": "rollup -wm -c build/dev.config.js",
     "build": "npm run lint && node build/build.js",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "release": "bash build/release.sh"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

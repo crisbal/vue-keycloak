@@ -9,7 +9,7 @@ const cjs = require('rollup-plugin-commonjs')
 const node = require('rollup-plugin-node-resolve')
 const replace = require('rollup-plugin-replace')
 
-const version = require('../package.json').version
+const version = process.env.VERSION || require('../package.json').version
 const banner =
 `/**
   * vue-keycloak v${version}
@@ -102,7 +102,7 @@ function buildEntry (config) {
         return write(config.dest, minified, true)
       } else {
         return write(config.dest, code)
-      }  
+      }
     })
   })
 }
