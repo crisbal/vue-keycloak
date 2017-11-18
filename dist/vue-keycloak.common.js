@@ -1,5 +1,5 @@
 /**
-  * vue-keycloak v0.0.7
+  * vue-keycloak v0.0.8
   * (c) Cristian Baldi 2017
   */
 'use strict';
@@ -44,6 +44,13 @@ var keycloak = createCommonjsModule(function (module) {
             interval: 5
         };
 
+        var scripts = document.getElementsByTagName('script');
+        for (var i = 0; i < scripts.length; i++) {
+            if ((scripts[i].src.indexOf('keycloak.js') !== -1 || scripts[i].src.indexOf('keycloak.min.js') !== -1) && scripts[i].src.indexOf('version=') !== -1) {
+                kc.iframeVersion = scripts[i].src.substring(scripts[i].src.indexOf('version=') + 8).split('&')[0];
+            }
+        }
+
         kc.init = function (initOptions) {
             kc.authenticated = false;
 
@@ -54,7 +61,7 @@ var keycloak = createCommonjsModule(function (module) {
             } else if (initOptions && initOptions.adapter === 'default') {
                 adapter = loadAdapter();
             } else {
-                if (window.Cordova) {
+                if (window.Cordova || window.cordova) {
                     adapter = loadAdapter('cordova');
                 } else {
                     adapter = loadAdapter();
@@ -225,7 +232,7 @@ var keycloak = createCommonjsModule(function (module) {
             var callbackState = {
                 state: state,
                 nonce: nonce,
-                redirectUri: encodeURIComponent(redirectUri),
+                redirectUri: encodeURIComponent(redirectUri)
             };
 
             if (options && options.prompt) {
@@ -836,7 +843,12 @@ var keycloak = createCommonjsModule(function (module) {
             };
 
             var src = getRealmUrl() + '/protocol/openid-connect/login-status-iframe.html';
+            if (kc.iframeVersion) {
+                src = src + '?version=' + kc.iframeVersion;
+            }
+
             iframe.setAttribute('src', src );
+            iframe.setAttribute('title', 'keycloak-session-iframe' );
             iframe.style.display = 'none';
             document.body.appendChild(iframe);
 
@@ -941,7 +953,14 @@ var keycloak = createCommonjsModule(function (module) {
 
             if (type == 'cordova') {
                 loginIframe.enable = false;
-
+                var cordovaOpenWindowWrapper = function(loginUrl, target, options) {
+                    if (window.cordova && window.cordova.InAppBrowser) {
+                        // Use inappbrowser for IOS and Android if available
+                        return window.cordova.InAppBrowser.open(loginUrl, target, options);
+                    } else {
+                        return window.open(loginUrl, target, options);
+                    }
+                };
                 return {
                     login: function(options) {
                         var promise = createPromise();
@@ -952,8 +971,7 @@ var keycloak = createCommonjsModule(function (module) {
                         }
 
                         var loginUrl = kc.createLoginUrl(options);
-                        var ref = window.open(loginUrl, '_blank', o);
-
+                        var ref = cordovaOpenWindowWrapper(loginUrl, '_blank', o);
                         var completed = false;
 
                         ref.addEventListener('loadstart', function(event) {
@@ -986,7 +1004,7 @@ var keycloak = createCommonjsModule(function (module) {
                         var promise = createPromise();
 
                         var logoutUrl = kc.createLogoutUrl(options);
-                        var ref = window.open(logoutUrl, '_blank', 'location=no,hidden=yes');
+                        var ref = cordovaOpenWindowWrapper(logoutUrl, '_blank', 'location=no,hidden=yes');
 
                         var error;
 
@@ -1019,7 +1037,7 @@ var keycloak = createCommonjsModule(function (module) {
 
                     register : function() {
                         var registerUrl = kc.createRegisterUrl();
-                        var ref = window.open(registerUrl, '_blank', 'location=no');
+                        var ref = cordovaOpenWindowWrapper(registerUrl, '_blank', 'location=no');
                         ref.addEventListener('loadstart', function(event) {
                             if (event.url.indexOf('http://localhost') == 0) {
                                 ref.close();
@@ -1029,7 +1047,7 @@ var keycloak = createCommonjsModule(function (module) {
 
                     accountManagement : function() {
                         var accountUrl = kc.createAccountUrl();
-                        var ref = window.open(accountUrl, '_blank', 'location=no');
+                        var ref = cordovaOpenWindowWrapper(accountUrl, '_blank', 'location=no');
                         ref.addEventListener('loadstart', function(event) {
                             if (event.url.indexOf('http://localhost') == 0) {
                                 ref.close();
@@ -1337,6 +1355,6 @@ VueKeyCloak.install = function (Vue, options) {
   });
 };
 
-VueKeyCloak.version = '0.0.7';
+VueKeyCloak.version = '0.0.8';
 
 module.exports = VueKeyCloak;

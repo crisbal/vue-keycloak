@@ -25,12 +25,12 @@
   <script>
     Vue.use(VueKeycloak, {
       keycloakOptions: {
-        "realm": "MyRealm",
+        "realm": "WikiToLearn",
         "url": "http://localhost:5555/auth",
         "ssl-required": "external",
-        "resource": "MyClient",
+        "resource": "WikiToLearn",
         "public-client": true,
-        "clientId": "MyClient"
+        "clientId": "WikiToLearn"
       },
       keycloakInitOptions: {
         onLoad: 'check-sso'
