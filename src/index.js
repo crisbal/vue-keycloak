@@ -31,8 +31,8 @@ VueKeyCloak.install = (Vue, options: Object = {
   })
 
   keycloak.init(options.keycloakInitOptions).success((isAuthenticated) => {
-    watch.ready = true
     updateWatchVariables(isAuthenticated)
+    watch.ready = true
 
     if (isAuthenticated) {
       setTimeout(() => {

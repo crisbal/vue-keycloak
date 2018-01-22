@@ -1,5 +1,5 @@
 /**
-  * vue-keycloak v0.0.9
+  * vue-keycloak v0.0.10
   * (c) Cristian Baldi 2018
   */
 'use strict';
@@ -1321,8 +1321,8 @@ VueKeyCloak.install = function (Vue, options) {
   });
 
   keycloak$$1.init(options.keycloakInitOptions).success(function (isAuthenticated) {
-    watch.ready = true;
     updateWatchVariables(isAuthenticated);
+    watch.ready = true;
 
     if (isAuthenticated) {
       setTimeout(function () {
@@ -1357,6 +1357,6 @@ VueKeyCloak.install = function (Vue, options) {
   });
 };
 
-VueKeyCloak.version = '0.0.9';
+VueKeyCloak.version = '0.0.10';
 
 module.exports = VueKeyCloak;
