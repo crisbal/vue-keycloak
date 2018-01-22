@@ -31,8 +31,9 @@ VueKeyCloak.install = (Vue, options: Object = {
   })
 
   keycloak.init(options.keycloakInitOptions).success((isAuthenticated) => {
-    updateWatchVariables(isAuthenticated)
-    watch.ready = true
+    updateWatchVariables(isAuthenticated).then(() => {
+      watch.ready = true
+    })
 
     if (isAuthenticated) {
       setTimeout(() => {
@@ -50,9 +51,14 @@ VueKeyCloak.install = (Vue, options: Object = {
     if (isAuthenticated) {
       watch.token = keycloak.token
       watch.resourceAccess = keycloak.resourceAccess
-      keycloak.loadUserProfile().success((user) => {
-        watch.user = user
+      return new Promise((resolve, reject) => {
+        keycloak.loadUserProfile().success((user) => {
+          watch.user = user
+          resolve()
+        })
       })
+    } else {
+      return Promise.resolve()
     }
   }
 
