@@ -1,6 +1,6 @@
 /**
-  * vue-keycloak v0.0.8
-  * (c) Cristian Baldi 2017
+  * vue-keycloak v0.0.9
+  * (c) Cristian Baldi 2018
   */
 'use strict';
 
@@ -170,10 +170,12 @@ var keycloak = createCommonjsModule(function (module) {
                 var callback = parseCallback(window.location.href);
 
                 if (callback) {
-                    setupCheckLoginIframe();
-                    window.history.replaceState({}, null, callback.newUrl);
-                    processCallback(callback, initPromise);
-                    return;
+                    return setupCheckLoginIframe().success(function() {
+                        window.history.replaceState({}, null, callback.newUrl);
+                        processCallback(callback, initPromise);
+                    }).error(function (e) {
+                        initPromise.setError();
+                    });
                 } else if (initOptions) {
                     if (initOptions.token && initOptions.refreshToken) {
                         setToken(initOptions.token, initOptions.refreshToken, initOptions.idToken);
@@ -1355,6 +1357,6 @@ VueKeyCloak.install = function (Vue, options) {
   });
 };
 
-VueKeyCloak.version = '0.0.8';
+VueKeyCloak.version = '0.0.9';
 
 module.exports = VueKeyCloak;
