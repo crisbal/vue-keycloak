@@ -1,5 +1,5 @@
 /**
-  * vue-keycloak v0.0.10
+  * vue-keycloak v0.0.11
   * (c) Cristian Baldi 2018
   */
 (function (global, factory) {
@@ -1325,8 +1325,9 @@ VueKeyCloak.install = function (Vue, options) {
   });
 
   keycloak$$1.init(options.keycloakInitOptions).success(function (isAuthenticated) {
-    updateWatchVariables(isAuthenticated);
-    watch.ready = true;
+    updateWatchVariables(isAuthenticated).then(function () {
+      watch.ready = true;
+    });
 
     if (isAuthenticated) {
       setTimeout(function () {
@@ -1346,9 +1347,14 @@ VueKeyCloak.install = function (Vue, options) {
     if (isAuthenticated) {
       watch.token = keycloak$$1.token;
       watch.resourceAccess = keycloak$$1.resourceAccess;
-      keycloak$$1.loadUserProfile().success(function (user) {
-        watch.user = user;
-      });
+      return new Promise(function (resolve, reject) {
+        keycloak$$1.loadUserProfile().success(function (user) {
+          watch.user = user;
+          resolve();
+        });
+      })
+    } else {
+      return Promise.resolve()
     }
   }
 
@@ -1361,7 +1367,7 @@ VueKeyCloak.install = function (Vue, options) {
   });
 };
 
-VueKeyCloak.version = '0.0.10';
+VueKeyCloak.version = '0.0.11';
 
 return VueKeyCloak;
 
