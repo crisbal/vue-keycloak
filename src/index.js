@@ -36,7 +36,7 @@ VueKeyCloak.install = (Vue, options: Object = {
     })
 
     if (isAuthenticated) {
-      setTimeout(() => {
+      setInterval(() => {
         keycloak.updateToken(options.refreshTime + 2)
           .success((refreshed) => {
             if (refreshed) updateWatchVariables(true)
