@@ -1330,7 +1330,7 @@ VueKeyCloak.install = function (Vue, options) {
     });
 
     if (isAuthenticated) {
-      setTimeout(function () {
+      setInterval(function () {
         keycloak$$1.updateToken(options.refreshTime + 2)
           .success(function (refreshed) {
             if (refreshed) { updateWatchVariables(true); }
